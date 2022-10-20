@@ -1,0 +1,65 @@
+# Simple Wordcount Perf Tests
+
+This includes performance tests for various simple wordcount programs
+written in different programming languagues.
+
+Each word is separated by spaces and no other processing is performed.
+
+The purpose is to perf test each programming language's disk IO and
+hash/dictionary speed.
+
+## Results
+
+$ make
+Downloading data, it's going to take a while ...
+
+data.zip            100%[===================>] 307.65M   688KB/s    in 8m 6s
+
+unzip -c data.zip | head -1000000 > data.txt
+
+Perf tests begin ...
+
+time wc_c++ data.txt > /dev/null ; echo
+
+real    0m2.558s
+user    0m2.438s
+sys     0m0.114s
+
+time wc_go  data.txt > /dev/null ; echo
+
+real    0m3.662s
+user    0m3.419s
+sys     0m0.586s
+
+time wc.js  data.txt > /dev/null ; echo
+
+real    0m5.444s
+user    0m5.446s
+sys     0m0.183s
+
+time wc.py  data.txt > /dev/null ; echo
+
+real    0m5.651s
+user    0m5.494s
+sys     0m0.141s
+
+time wc.pl  data.txt > /dev/null ; echo
+
+real    0m7.120s
+user    0m6.933s
+sys     0m0.176s
+
+time wc.rb  data.txt > /dev/null ; echo
+
+real    0m8.541s
+user    0m8.363s
+sys     0m0.160s
+
+Perf test end.
+
+## Implementation Notes
+
+- All programs, except javascript, write to stdout, which is then
+  piped to `/dev/null`.  The reason being that javascript's
+  `console.log()` is very slow.  Including `console.log` in the
+  javascript would put javascript last in the list.
